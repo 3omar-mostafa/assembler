@@ -1,0 +1,14 @@
+
+operand: (addressing mode) , (address):
+
+handle variables
+
+handlers ins:
+    br,
+    0,
+    1,
+    2
+
+handle labels
+
+x:MOV R1,R2
