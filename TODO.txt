@@ -1,7 +1,7 @@
 
 operand: (addressing mode) , (address):
 
-handle variables
+handle variables: done
 
 handlers ins:
     br,

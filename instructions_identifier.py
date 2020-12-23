@@ -32,3 +32,28 @@ def instructions_identifier(line):
     ):
         errorHandler(line['number'], line['content'])
     return instruction_type, opcode, operand1, operand2
+
+
+variables_table = {}
+
+
+def handle_variable(IR, line):
+
+    segments = line['content'].split()
+
+    if len(segments) < 3 or segments[0] != 'DEFINE' or segments[1][0].isdigit():
+        errorHandler(line['number'], line['content'])
+
+    name = segments[1]
+    values = ''.join(segments[2:]).split(',')
+
+    if '' in values:
+        errorHandler(line['number'], line['content'])
+
+    location = len(IR)
+    variables_table[name] = location
+
+    for i in values:
+        IR.append(f'{int(i):016b}')
+
+    return
