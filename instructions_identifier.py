@@ -26,15 +26,17 @@ def instructions_identifier(line):
     if (
         instruction_type is None or
         instruction_type == 'op2' and operand2 is None or
-        instruction_type == 'op1' and operand1 is None or
-        (instruction_type == 'branch' or instruction_type == '0op')
-        and (operand2 is not None or operand1 is not None)
+        (instruction_type == 'op1' or instruction_type == 'branch') and (operand1 is None or operand2 is not None) or
+        instruction_type == '0op' and
+        (operand2 is not None or operand1 is not None)
     ):
         errorHandler(line['number'], line['content'])
+
     return instruction_type, opcode, operand1, operand2
 
 
 variables_table = {}
+labels_table = {}
 
 
 def handle_variable(IR, line):
@@ -55,5 +57,16 @@ def handle_variable(IR, line):
 
     for i in values:
         IR.append(f'{int(i):016b}')
+
+    return
+
+
+def handle_label(IR, line):
+    name = line['content'].split(':')[0]
+    if len(name.split()) > 1 or name[0].isdigit():
+        errorHandler(line['number'], line['content'])
+
+    location = len(IR)
+    labels_table[name] = location
 
     return
