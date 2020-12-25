@@ -7,7 +7,7 @@ Label3: 				; address 5
 MOV -(R3), M 			; M = 5 , R3= 19 address 5
 X: DEC R0 					; R0 = 6 address 7
 Y:CMP #18, @R3 			; C=1,N=1 address 8
-BHI Label1 				; Not taken address 10
+BHI Label1				; Not taken address 10
 MOV #18,@R3 			; M=18 address 11
 Label1: 				; address 13
 DEC R0 					; R0=5 address 13
