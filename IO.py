@@ -79,7 +79,8 @@ def read_assembly_lines(asmFilePath):
     if int_label is None:
         memory[0] = instructions["0op"]["IRET"]
     else:
-        memory[0] = INTERRUPT['op'] + f'{int_label:011b}'
+        address_size = 16 - len(INTERRUPT['op'])
+        memory[0] = INTERRUPT['op'] + format(int_label, f'0{address_size}b')
 
     return lines
 

@@ -34,10 +34,13 @@ for line in assembly_lines:
 
     elif instruction_type == "branch":
         label_address = labels_table.get(op1)
+
         if label_address is None:
             errorHandler(line['number'], line['content'])
+
         offset = label_address - line['range'][1]
-        offset_binary = f'{abs(offset):08b}'
+        address_size = 16 - len(opcode)
+        offset_binary = format(abs(offset), f'0{address_size}b')
 
         if offset < 0:
             offset_binary = findTwoscomplement(offset_binary)
@@ -47,5 +50,8 @@ for line in assembly_lines:
         label_address = labels_table.get(op1)
         if label_address is None:
             errorHandler(line['number'], line['content'])
-        memory[line['range'][0]] = opcode + f'{label_address:011b}'
+        address_size = 16 - len(opcode)
+        memory[line['range'][0]] = opcode + \
+            format(label_address, f'0{address_size}b')
+
 writeOutput()
