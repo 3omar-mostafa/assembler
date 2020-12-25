@@ -1,4 +1,3 @@
-from operands_identifier import N
 from errorHandler import errorHandler
 import re
 
@@ -73,6 +72,8 @@ def read_assembly_lines(asmFilePath):
 
     for i in range(memory_size):
         memory.append("0" * 16)
+    print(variables_table)
+    print(labels_table)
     return lines
 
 
