@@ -1,5 +1,6 @@
 from instructions import instructions
 from errorHandler import errorHandler
+from IO import memory
 
 
 def instructions_identifier(line):
@@ -35,11 +36,7 @@ def instructions_identifier(line):
     return instruction_type, opcode, operand1, operand2
 
 
-variables_table = {}
-labels_table = {}
-
-
-def handle_variable(IR, line):
+def handle_variable(line):
 
     segments = line['content'].split()
 
@@ -52,21 +49,23 @@ def handle_variable(IR, line):
     if '' in values:
         errorHandler(line['number'], line['content'])
 
-    location = len(IR)
-    variables_table[name] = location
-
+    j = line['range'][0]
     for i in values:
-        IR.append(f'{int(i):016b}')
+        memory[j] = (f'{int(i):016b}')
+        j += 1
 
-    return
-
-
-def handle_label(IR, line):
-    name = line['content'].split(':')[0]
-    if len(name.split()) > 1 or name[0].isdigit():
+    if j != line['range'][1]:
         errorHandler(line['number'], line['content'])
 
-    location = len(IR)
-    labels_table[name] = location
-
     return
+
+
+# def handle_label(IR, line):
+#     name = line['content'].split(':')[0]
+#     if len(name.split()) > 1 or name[0].isdigit():
+#         errorHandler(line['number'], line['content'])
+
+#     location = len(IR)
+#     labels_table[name] = location
+
+#     return
