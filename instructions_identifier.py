@@ -27,7 +27,9 @@ def instructions_identifier(line):
     if (
         instruction_type is None or
         instruction_type == 'op2' and operand2 is None or
-        (instruction_type == 'op1' or instruction_type == 'branch') and (operand1 is None or operand2 is not None) or
+        (instruction_type == 'op1' or instruction_type ==
+         'branch' or instruction_type == 'jmp')
+        and (operand1 is None or operand2 is not None) or
         instruction_type == '0op' and
         (operand2 is not None or operand1 is not None)
     ):

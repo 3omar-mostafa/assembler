@@ -1,4 +1,5 @@
 from errorHandler import errorHandler
+from instructions import INTERRUPT, instructions
 import re
 
 
@@ -8,7 +9,7 @@ def compute_words(line):
     if tmp[0].startswith("DEFINE"):
         words -= 1
 
-    if len(tmp) > 1 and not tmp[0].startswith('B'):
+    if len(tmp) > 1 and not tmp[0].startswith(('B', "JSR")):
         tmp = ''.join(tmp[1:]).split(',')
         for op in tmp:
             if op.startswith('#') or op[0].isdigit() or len(op) == 1:
@@ -36,7 +37,7 @@ memory = []
 
 
 def read_assembly_lines(asmFilePath):
-    current_memory_location = 0
+    current_memory_location = 1
     memory_size = 1
     lines = []
     file = open(asmFilePath)
@@ -72,8 +73,14 @@ def read_assembly_lines(asmFilePath):
 
     for i in range(memory_size):
         memory.append("0" * 16)
-    print(variables_table)
-    print(labels_table)
+
+    int_label = labels_table.get(INTERRUPT['name'])
+
+    if int_label is None:
+        memory[0] = instructions["0op"]["IRET"]
+    else:
+        memory[0] = INTERRUPT['op'] + f'{int_label:011b}'
+
     return lines
 
 

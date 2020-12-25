@@ -31,12 +31,21 @@ for line in assembly_lines:
 
     elif instruction_type == "0op":
         memory[line['range'][0]] = opcode
+
     elif instruction_type == "branch":
-        offset = labels_table[op1] - line['range'][1]
+        label_address = labels_table.get(op1)
+        if label_address is None:
+            errorHandler(line['number'], line['content'])
+        offset = label_address - line['range'][1]
         offset_binary = f'{abs(offset):08b}'
 
         if offset < 0:
             offset_binary = findTwoscomplement(offset_binary)
         memory[line['range'][0]] = opcode + offset_binary
 
+    elif instruction_type == "jmp":
+        label_address = labels_table.get(op1)
+        if label_address is None:
+            errorHandler(line['number'], line['content'])
+        memory[line['range'][0]] = opcode + f'{label_address:011b}'
 writeOutput()
