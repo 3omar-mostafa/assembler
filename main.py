@@ -1,18 +1,18 @@
-from errorHandler import errorHandler
-from os import write
-import sys
+import argparse
+
 from IO import read_assembly_lines, memory, writeOutput, labels_table
+from errorHandler import errorHandler
 from instructions_identifier import instructions_identifier, handle_variable
-from operands_identifier import *
+from operands_identifier import handle_instruction
 from util import findTwoscomplement
 
-argsNum = len(sys.argv)  # TODO : Checks
-# asmFilePath = sys.argv[1]
-asmFilePath = 'main.asm'
-print(asmFilePath)
+arg_parser = argparse.ArgumentParser(description='PDP-11 Like Assembler')
+arg_parser.add_argument("assembly_file", help="Assembly Filename")
+arg_parser.add_argument("output_file", help="Output Machine Code Filename")
 
-assembly_lines = read_assembly_lines(asmFilePath)
+args = arg_parser.parse_args()
 
+assembly_lines = read_assembly_lines(args.assembly_file)
 
 for line in assembly_lines:
 
@@ -54,4 +54,4 @@ for line in assembly_lines:
         memory[line['range'][0]] = opcode + \
             format(label_address, f'0{address_size}b')
 
-writeOutput()
+writeOutput(args.output_file)
