@@ -37,8 +37,8 @@ memory = []
 
 
 def read_assembly_lines(asmFilePath):
-    current_memory_location = 1
-    memory_size = 1
+    current_memory_location = 0
+    memory_size = 0
     lines = []
     file = open(asmFilePath)
     for idx, line in enumerate(file):
@@ -73,14 +73,6 @@ def read_assembly_lines(asmFilePath):
 
     for i in range(memory_size):
         memory.append("0" * 16)
-
-    int_label = labels_table.get(INTERRUPT['name'])
-
-    if int_label is None:
-        memory[0] = instructions["0op"]["IRET"]
-    else:
-        address_size = 16 - len(INTERRUPT['op'])
-        memory[0] = INTERRUPT['op'] + format(int_label, f'0{address_size}b')
 
     return lines
 
