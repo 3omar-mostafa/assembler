@@ -37,8 +37,8 @@ memory = []
 
 
 def read_assembly_lines(asmFilePath):
-    current_memory_location = 0
-    memory_size = 0
+    current_memory_location = 1
+    memory_size = 1
     lines = []
     file = open(asmFilePath)
     for idx, line in enumerate(file):
@@ -74,10 +74,24 @@ def read_assembly_lines(asmFilePath):
     for i in range(memory_size):
         memory.append("0" * 16)
 
+    int_label = labels_table.get(INTERRUPT['name'])
+
+    if int_label is None:
+        memory[0] = instructions["0op"]["IRET"]
+    else:
+        address_size = 16 - len(INTERRUPT['op'])
+        memory[0] = INTERRUPT['op'] + format(int_label, f'0{address_size}b')
+
     return lines
 
 
 def writeOutput(filename="out.txt"):
+
+    mem = ["0" * 16] * 2048
+    mem[:len(memory)-1] = memory[1:]
+    mem[-1] = memory[0]
+
     with open(filename, 'w') as filehandle:
-        for listitem in memory:
+        filehandle.write('// memory data file (do not edit the following line - required for mem load use)\n// instance=/cpu/spr_alu_ram_modules/u1/ram\n// format=mti addressradix=d dataradix=b version=1.0 wordsperline=1 noaddress\n')
+        for listitem in mem:
             filehandle.write('%s\n' % listitem)
